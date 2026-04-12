@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.foliaco.vision_bathroom.dto.UserRequest;
 import com.foliaco.vision_bathroom.dto.UserResponse;
 import com.foliaco.vision_bathroom.entity.User;
 import com.foliaco.vision_bathroom.entity.User.Role;
@@ -17,6 +18,29 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+    @Override
+    public List<UserResponse> getAllUsersByRoles(List<Role> roles) {
+        return userRepository.findUsersByRoles(roles).stream()
+                .map(user -> toUserResponse(user))
+                .toList();
+    }
+
+    @Override
+    public UserResponse updateUser(Long id, UserRequest request) {
+        
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("User not found with id " + id));
+
+        user.setName(request.name());
+        user.setEmail(request.email());
+        user.setRole(request.role());
+
+        user = userRepository.save(user);
+
+        return toUserResponse(user);
+
+    }
 
     @Override
     public UserResponse getCurrentUser(String email) {
@@ -40,5 +64,6 @@ public class UserServiceImpl implements UserService {
     private UserResponse toUserResponse(User user) {
         return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRole().toString());
     }
+
 
 }

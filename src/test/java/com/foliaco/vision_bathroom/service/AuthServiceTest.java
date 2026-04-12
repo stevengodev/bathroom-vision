@@ -22,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.foliaco.vision_bathroom.dto.AuthResponse;
+import com.foliaco.vision_bathroom.dto.LoginRequest;
 import com.foliaco.vision_bathroom.dto.UserRequest;
 import com.foliaco.vision_bathroom.entity.User;
 import com.foliaco.vision_bathroom.exception.ConflictException;
@@ -62,7 +63,7 @@ public class AuthServiceTest {
     @DisplayName("Debe registrar usuario correctamente")
     void register_success() {
 
-        var request = new UserRequest("Test", "test@mail.com", "1234");
+        var request = new UserRequest("Test", "test@mail.com", "1234",  User.Role.USER);
 
         User savedUser = User.builder()
                 .id(1L)
@@ -91,7 +92,7 @@ public class AuthServiceTest {
     @DisplayName("Debe fallar registro si el email ya existe")
     void register_emailAlreadyExists() {
 
-        var request = new UserRequest("Test", "test@mail.com", "1234");
+        var request = new UserRequest("Test", "test@mail.com", "1234", User.Role.USER);
 
         when(userRepository.findByEmail("test@mail.com"))
                 .thenReturn(Optional.of(new User()));
@@ -106,7 +107,7 @@ public class AuthServiceTest {
     @DisplayName("Debe hacer login correctamente")
     void login_success() {
 
-        var request = new UserRequest("Test", "test@mail.com", "1234");
+        var request = new LoginRequest("test@mail.com", "1234");
 
         User user = User.builder()
                 .id(1L)
@@ -134,7 +135,7 @@ public class AuthServiceTest {
     @DisplayName("Debe lanzar excepción si el usuario no existe")
     void login_userNotFound() {
 
-        var request = new UserRequest("Test", "test@mail.com", "1234");
+        var request = new LoginRequest("test@mail.com", "1234");
 
         when(userRepository.findByEmail("test@mail.com"))
                 .thenReturn(Optional.empty());
@@ -150,7 +151,7 @@ public class AuthServiceTest {
     @DisplayName("Debe lanzar excepción si el password es incorrecto")
     void login_invalidPassword() {
 
-        var request = new UserRequest("Test", "test@mail.com", "wrong");
+        var request = new LoginRequest("test@mail.com", "wrong");
 
         User user = User.builder()
                 .email("test@mail.com")

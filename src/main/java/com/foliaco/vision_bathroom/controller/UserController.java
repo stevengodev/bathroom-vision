@@ -8,9 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import com.foliaco.vision_bathroom.dto.UserRequest;
 import com.foliaco.vision_bathroom.dto.UserResponse;
 import com.foliaco.vision_bathroom.entity.User.Role;
 import com.foliaco.vision_bathroom.service.UserService;
+
 
 @RestController
 @RequestMapping("/api/users")
@@ -18,6 +20,18 @@ import com.foliaco.vision_bathroom.service.UserService;
 public class UserController {
     
     private final UserService userService;
+
+    @GetMapping
+    public ResponseEntity<List<UserResponse>> getAllByRoles(@RequestParam List<Role> roles) {
+        return ResponseEntity.ok(userService.getAllUsersByRoles(roles));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, 
+                                                    @RequestBody UserRequest request) {
+        return ResponseEntity.ok(userService.updateUser(id, request));
+    }
+
 
     @GetMapping("profile")
     public ResponseEntity<UserResponse> getById(Authentication auth) {

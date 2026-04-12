@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.foliaco.vision_bathroom.dto.AuthResponse;
 import com.foliaco.vision_bathroom.dto.GoogleIdTokenRequest;
+import com.foliaco.vision_bathroom.dto.LoginRequest;
 import com.foliaco.vision_bathroom.dto.UserRequest;
 import com.foliaco.vision_bathroom.service.AuthService;
 
@@ -32,7 +33,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody UserRequest request) {
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
         AuthResponse response =  authService.login(request);
         return ResponseEntity.ok(response);
     }

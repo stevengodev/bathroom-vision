@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.foliaco.vision_bathroom.dto.AuthResponse;
+import com.foliaco.vision_bathroom.dto.LoginRequest;
 import com.foliaco.vision_bathroom.dto.UserRequest;
 import com.foliaco.vision_bathroom.dto.UserResponse;
 import com.foliaco.vision_bathroom.entity.User;
@@ -61,7 +62,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthResponse login(UserRequest request) {
+    public AuthResponse login(LoginRequest request) {
 
         User user = userRepository.findByEmail(request.email()).orElseThrow(
                 () -> new UnauthorizedException("Invalid credentials"));
