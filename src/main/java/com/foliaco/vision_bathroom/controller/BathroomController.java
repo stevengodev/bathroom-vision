@@ -18,18 +18,7 @@ import com.foliaco.vision_bathroom.service.BathroomService;
 
 import java.util.List;
 
-/**
- * HU-001: Listar baños disponibles (usuario) GET /api/bathrooms
- * HU-016: Crear baño POST /api/bathrooms
- * HU-017: Visualizar baños (admin) GET /api/bathrooms/admin
- * HU-018: Editar baño PUT /api/bathrooms/{id}
- * HU-019: Eliminar baño DELETE /api/bathrooms/{id}
- * Extras:
- * GET /api/bathrooms/{id} → detalle de un baño (HU-002)
- * GET /api/bathrooms/block/{blockId} → baños activos de un bloque
- * GET /api/bathrooms/admin/block/{id} → todos los baños de un bloque (admin)
- * POST /api/bathrooms/{id}/deactivate → desactivar baño sin eliminarlo
- */
+
 @RestController
 @RequestMapping("/api/bathrooms")
 @RequiredArgsConstructor
@@ -45,12 +34,6 @@ public class BathroomController {
     @GetMapping("/{id}")
     public ResponseEntity<BathroomResponse> getById(@PathVariable Long id) {
         return ResponseEntity.ok(bathroomService.findById(id));
-    }
-
-    @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<BathroomResponse>> getAll() {
-        return ResponseEntity.ok(bathroomService.findAll());
     }
 
     @PostMapping
@@ -91,6 +74,10 @@ public class BathroomController {
             @RequestParam(required = false) Gender gender,
             @RequestParam(required = false) Long blockId,
             @RequestParam(required = false) String query) {
+
+        if (status == null && gender == null && blockId == null && query == null) {
+            return ResponseEntity.ok(bathroomService.findAll());
+        }
 
         BathroomFilter filter = new BathroomFilter(status, gender, blockId, query);
         List<BathroomResponse> bathrooms = bathroomService.searchBathrooms(filter);

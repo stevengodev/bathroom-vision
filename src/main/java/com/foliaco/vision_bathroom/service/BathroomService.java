@@ -16,6 +16,10 @@ import com.foliaco.vision_bathroom.entity.Bathroom.BathroomStatus;
  */
 public interface BathroomService {
     
+    /*
+    Deprecado: Listar todos los baños sin filtros. Se recomienda usar searchBathrooms 
+    con filtros específicos para obtener resultados más relevantes.
+    */
     List<BathroomResponse> findAll();
 
     BathroomResponse findById(Long id);
