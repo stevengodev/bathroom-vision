@@ -13,7 +13,6 @@ import com.foliaco.vision_bathroom.dto.LoginRequest;
 import com.foliaco.vision_bathroom.dto.UserRequest;
 import com.foliaco.vision_bathroom.dto.UserResponse;
 import com.foliaco.vision_bathroom.entity.User;
-import com.foliaco.vision_bathroom.entity.User.Role;
 import com.foliaco.vision_bathroom.exception.ConflictException;
 import com.foliaco.vision_bathroom.exception.InvalidGoogleTokenException;
 import com.foliaco.vision_bathroom.exception.UnauthorizedException;
@@ -50,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
         user.setName(request.name());
         user.setEmail(request.email());
         user.setPassword(passwordEncoder.encode(request.password()));
-        user.setRole(Role.USER);
+        user.setRole(request.role());
         user.setCreatedAt(LocalDateTime.now());
 
         String jwt = jwtService.generateToken(user);

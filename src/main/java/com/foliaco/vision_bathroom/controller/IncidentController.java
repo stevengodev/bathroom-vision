@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import com.foliaco.vision_bathroom.entity.Incident.Status;
+import com.foliaco.vision_bathroom.entity.IncidentMessage.Category;
 import com.foliaco.vision_bathroom.service.IncidentService;
 import com.foliaco.vision_bathroom.service.UserService;
 
@@ -24,7 +25,13 @@ public class IncidentController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<IncidentResponse>> getAll(@RequestParam Status status) {
+    public ResponseEntity<List<IncidentResponse>> getAll(@RequestParam Status status, 
+                                                        @RequestParam(required = false) Category category) {
+
+        if (category != null) {
+            return ResponseEntity.ok(incidentService.findAllByStatusAndCategory(status, category));
+        }
+
         return ResponseEntity.ok(incidentService.findAll(status));
     }
 
