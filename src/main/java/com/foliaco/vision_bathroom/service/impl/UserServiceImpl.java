@@ -2,6 +2,7 @@ package com.foliaco.vision_bathroom.service.impl;
 
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.foliaco.vision_bathroom.dto.UserRequest;
@@ -11,6 +12,7 @@ import com.foliaco.vision_bathroom.entity.User.Role;
 import com.foliaco.vision_bathroom.exception.NotFoundException;
 import com.foliaco.vision_bathroom.repository.UserRepository;
 import com.foliaco.vision_bathroom.service.UserService;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -18,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<UserResponse> getAllUsersByRoles(List<Role> roles) {
@@ -28,13 +32,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse updateUser(Long id, UserRequest request) {
-        
+
         User user = userRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("User not found with id " + id));
 
         user.setName(request.name());
         user.setEmail(request.email());
         user.setRole(request.role());
+
+        if (request.password() != null && !request.password().isBlank()) {
+            user.setPassword(passwordEncoder.encode(request.password()));
+        }
 
         user = userRepository.save(user);
 
@@ -64,6 +72,5 @@ public class UserServiceImpl implements UserService {
     private UserResponse toUserResponse(User user) {
         return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRole().toString());
     }
-
 
 }
