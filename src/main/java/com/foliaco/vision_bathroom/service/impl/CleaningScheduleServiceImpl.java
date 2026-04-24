@@ -2,6 +2,7 @@ package com.foliaco.vision_bathroom.service.impl;
 
 import java.util.List;
 
+import com.foliaco.vision_bathroom.dto.BathroomResponse;
 import com.foliaco.vision_bathroom.dto.CleaningScheduleRequest;
 import com.foliaco.vision_bathroom.dto.CleaningScheduleResponse;
 import com.foliaco.vision_bathroom.entity.Bathroom;
@@ -149,7 +150,16 @@ public class CleaningScheduleServiceImpl implements CleaningScheduleService {
         private CleaningScheduleResponse toCleaningScheduleResponse(CleaningSchedule cleaningSchedule) {
                 return new CleaningScheduleResponse(
                                 cleaningSchedule.getId(),
-                                cleaningSchedule.getBathroom().getId(),
+                                new BathroomResponse(
+                                                cleaningSchedule.getBathroom().getId(),
+                                                cleaningSchedule.getBathroom().getGender(),
+                                                cleaningSchedule.getBathroom().getBlock().getId(),
+                                                cleaningSchedule.getBathroom().getBlock().getName(),
+                                                cleaningSchedule.getBathroom().getStatus(),
+                                                cleaningSchedule.getBathroom().getFloor()
+                                        ),
+                                cleaningSchedule.getUser().getId(),
+                                cleaningSchedule.getUser().getName(),
                                 cleaningSchedule.getStartDate(),
                                 cleaningSchedule.getEndDate(),
                                 cleaningSchedule.getFrequency(),

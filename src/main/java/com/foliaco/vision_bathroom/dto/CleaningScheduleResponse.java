@@ -7,7 +7,9 @@ import java.time.LocalTime;
 
 public record CleaningScheduleResponse(
         Long id,
-        Long bathroomId,
+        BathroomResponse bathroom,
+        Long userId,
+        String userName,
         LocalDate startDate,
         LocalDate endDate,
         CleaningSchedule.Frequency frequency,
