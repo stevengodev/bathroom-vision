@@ -1,9 +1,11 @@
 package com.foliaco.vision_bathroom.service.impl;
 
+import com.foliaco.vision_bathroom.dto.BathroomResponse;
 import com.foliaco.vision_bathroom.dto.MaintenanceRequest;
 import com.foliaco.vision_bathroom.dto.MaintenanceResponse;
 import com.foliaco.vision_bathroom.entity.Bathroom;
 import com.foliaco.vision_bathroom.entity.Maintenance;
+import com.foliaco.vision_bathroom.entity.Maintenance.Status;
 import com.foliaco.vision_bathroom.exception.ConflictException;
 import com.foliaco.vision_bathroom.exception.NotFoundException;
 import com.foliaco.vision_bathroom.repository.BathroomRepository;
@@ -32,6 +34,15 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     }
 
     @Override
+    public List<MaintenanceResponse> findAllByStatus(Status status) {
+
+        return maintenanceRepository.findAllByStatus(status).stream()
+                .map(maintenance -> toMaintenanceResponse(maintenance))
+                .toList();
+
+    }
+
+    @Override
     public MaintenanceResponse findById(Long id) {
         Maintenance maintenance = maintenanceRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Ticket de mantenimiento no encontrado con id: " + id));
@@ -42,7 +53,14 @@ public class MaintenanceServiceImpl implements MaintenanceService {
 
     @Override
     public List<MaintenanceResponse> findByBathroom(Long bathroomId) {
-        return List.of();
+        
+        Bathroom bathroom = bathroomRepository.findById(bathroomId)
+                .orElseThrow(() -> new NotFoundException("Baño no encontrado con id: " + bathroomId));
+
+        return maintenanceRepository.findByBathroomId(bathroom.getId()).stream()
+                .map(maintenance -> toMaintenanceResponse(maintenance))
+                .toList();
+
     }
 
     @Override
@@ -60,7 +78,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         maintenance.setBathroom(bathroom);
         maintenance.setTechnicianFullName(request.technicianFullName());
         maintenance.setDescription(request.description());
-        maintenance.setStatus(Maintenance.Status.PENDING);
+        maintenance.setStatus(Maintenance.Status.ABIERTO);
 
         return toMaintenanceResponse(maintenanceRepository.save(maintenance));
     }
@@ -71,8 +89,8 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         Maintenance maintenance = maintenanceRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Mantenimiento no encontrado con id: " + id));
 
-        if (maintenance.getStatus() == Maintenance.Status.RESOLVED) {
-            throw new ConflictException("No se puede modificar un ticket en estado RESOLVED");
+        if (maintenance.getStatus() == Maintenance.Status.CERRADO) {
+            throw new ConflictException("No se puede modificar un ticket en estado CERRADO");
         }
 
         Bathroom bathroom = bathroomRepository.findById(request.bathroomId()).orElseThrow(
@@ -93,7 +111,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
 
         maintenance.setStatus(status);
 
-        if (status == Maintenance.Status.RESOLVED) {
+        if (status == Maintenance.Status.CERRADO) {
             maintenance.setResolvedAt(LocalDateTime.now());
         }
 
@@ -115,17 +133,29 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     private MaintenanceResponse toMaintenanceResponse(Maintenance maintenance) {
 
         Bathroom bathroom = maintenance.getBathroom();
-        String bathroomDetails = "Ubicacion: " + bathroom.getBlock().getName() + " - Piso: " + bathroom.getFloor() + " - "
-                + " Genero: " + bathroom.getGender();
 
         return new MaintenanceResponse(
                 maintenance.getId(), 
-                bathroomDetails, 
+                toBathroomResponse(bathroom), 
                 maintenance.getTechnicianFullName(), 
                 maintenance.getDescription(),
                 maintenance.getStatus(), 
                 maintenance.getResolvedAt()
             );
     }
+
+
+    private BathroomResponse toBathroomResponse(Bathroom bathroom) {
+        return new BathroomResponse(
+            bathroom.getId(),
+            bathroom.getGender(),
+            bathroom.getBlock().getId(),
+            bathroom.getBlock().getName(),
+            bathroom.getStatus(),
+            bathroom.getFloor()
+        );
+    }
+
+
 
 }

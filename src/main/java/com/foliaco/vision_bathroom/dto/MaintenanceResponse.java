@@ -6,7 +6,7 @@ import com.foliaco.vision_bathroom.entity.Maintenance.Status;
 
 public record MaintenanceResponse(
     Long id,
-    String bathroom,
+    BathroomResponse bathroom,
     String technicianFullName,
     String description,
     Status status,

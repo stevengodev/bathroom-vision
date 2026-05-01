@@ -3,12 +3,14 @@ package com.foliaco.vision_bathroom.service;
 import com.foliaco.vision_bathroom.dto.MaintenanceRequest;
 import com.foliaco.vision_bathroom.dto.MaintenanceResponse;
 import com.foliaco.vision_bathroom.entity.Maintenance;
+import com.foliaco.vision_bathroom.entity.Maintenance.Status;
 
 import java.util.List;
 
 public interface MaintenanceService {
 
     List<MaintenanceResponse> findAll();
+    List<MaintenanceResponse> findAllByStatus(Status status);
     MaintenanceResponse findById(Long id);
     List<MaintenanceResponse> findByBathroom(Long bathroomId);
     List<MaintenanceResponse> findByCurrentUser(Long userId);

@@ -29,7 +29,7 @@ public interface MaintenanceRepository extends JpaRepository<Maintenance, Long> 
         WHERE m.status = :status
         ORDER BY m.reportedAt DESC
     """)
-    List<Maintenance> findAllFiltered(@Param("status") Maintenance.Status status);
+    List<Maintenance> findAllByStatus(@Param("status") Maintenance.Status status);
 
     /** Tickets de un baño específico (historial) */
     @Query("""

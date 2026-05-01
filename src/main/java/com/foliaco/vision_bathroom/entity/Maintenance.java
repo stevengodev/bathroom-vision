@@ -33,7 +33,7 @@ public class Maintenance {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private Status status = Status.PENDING;
+    private Status status = Status.ABIERTO;
 
     @Column(name = "resolved_at")
     private LocalDateTime resolvedAt;
@@ -47,6 +47,6 @@ public class Maintenance {
     private LocalDateTime updatedAt;
 
     public enum Status {
-        PENDING, RESOLVED
+        ABIERTO, CERRADO
     }
 }

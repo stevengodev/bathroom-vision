@@ -25,7 +25,10 @@ public class MaintenanceController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<MaintenanceResponse>> getAll() {
+    public ResponseEntity<List<MaintenanceResponse>> getAll(@RequestParam(required = false) Maintenance.Status status) {
+        if (status != null) {
+            return ResponseEntity.ok(maintenanceService.findAllByStatus(status));
+        }
         return ResponseEntity.ok(maintenanceService.findAll());
     }
 
@@ -47,16 +50,13 @@ public class MaintenanceController {
     }
 
     @PostMapping
-    public ResponseEntity<MaintenanceResponse> create(
-            @Valid @RequestBody MaintenanceRequest request
-    ) {
-
+    public ResponseEntity<MaintenanceResponse> create(@Valid @RequestBody MaintenanceRequest request) {
         MaintenanceResponse created = maintenanceService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<MaintenanceResponse> update(@PathVariable Long id,
             @Valid @RequestBody MaintenanceRequest request) {
         MaintenanceResponse updated = maintenanceService.update(id, request);
@@ -64,11 +64,8 @@ public class MaintenanceController {
     }
 
     @PatchMapping("/{id}/status")
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
-    public ResponseEntity<MaintenanceResponse> updateStatus(
-            @PathVariable Long id,
-            @RequestParam Maintenance.Status status
-    ) {
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<MaintenanceResponse> updateStatus(@PathVariable Long id, @RequestParam Maintenance.Status status) {
         MaintenanceResponse updated = maintenanceService.updateStatus(id, status);
         return ResponseEntity.ok(updated);
     }
