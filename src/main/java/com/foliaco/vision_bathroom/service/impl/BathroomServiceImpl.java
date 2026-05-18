@@ -97,12 +97,23 @@ public class BathroomServiceImpl implements BathroomService {
         Block block = blockRepository.findById(request.blockId()).orElseThrow(
                 () -> new NotFoundException("Block not found with id: " + request.blockId()));
 
+        // Guardar estado actual antes de modificar
+        BathroomStatus previousStatus = bathroom.getStatus();
+
         bathroom.setBlock(block);
         bathroom.setFloor(request.floor());
         bathroom.setGender(request.gender());
         bathroom.setStatus(request.status());
 
-        return toBathroomResponse(bathroomRepository.save(bathroom));
+        Bathroom savedBathroom = bathroomRepository.save(bathroom);
+
+        // Evita enviar notificación si el estado no cambió
+        if (previousStatus != request.status()) {
+            notificationService.notifyBathroomStatusChanged(
+                    buildPushNotificationRequest(savedBathroom));
+        }
+
+        return toBathroomResponse(savedBathroom);
 
     }
 
@@ -111,7 +122,7 @@ public class BathroomServiceImpl implements BathroomService {
         Bathroom bathroom = bathroomRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Bathroom not found with id " + id));
 
-        // Evita enviar notificación si el estado no cambió.
+        // Evita enviar notificación si el estado no cambió
         if (bathroom.getStatus() == status) {
             return toBathroomResponse(bathroom);
         }

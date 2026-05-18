@@ -19,7 +19,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.jpa.domain.Specification;
 
+import com.foliaco.vision_bathroom.dto.BathroomFilter;
 import com.foliaco.vision_bathroom.dto.BathroomRequest;
 import com.foliaco.vision_bathroom.dto.BathroomResponse;
 import com.foliaco.vision_bathroom.entity.Bathroom;
@@ -27,6 +29,7 @@ import com.foliaco.vision_bathroom.entity.Bathroom.BathroomStatus;
 import com.foliaco.vision_bathroom.entity.Bathroom.Gender;
 import com.foliaco.vision_bathroom.entity.Block;
 import com.foliaco.vision_bathroom.exception.NotFoundException;
+import com.foliaco.vision_bathroom.firebase.NotificationService;
 import com.foliaco.vision_bathroom.repository.BathroomRepository;
 import com.foliaco.vision_bathroom.repository.BlockRepository;
 import com.foliaco.vision_bathroom.service.impl.BathroomServiceImpl;
@@ -44,6 +47,9 @@ public class BathroomServiceTest {
 
     @Mock
     private BlockRepository blockRepository;
+
+    @Mock
+    private NotificationService notificationService;
 
     @InjectMocks
     private BathroomServiceImpl bathroomService;
@@ -201,6 +207,196 @@ public class BathroomServiceTest {
 
         verify(bathroomRepository, times(1)).findById(anyLong());
         verify(bathroomRepository, never()).delete(any(Bathroom.class));
+    }
+
+    @Test
+    @DisplayName("Busca baños usando filtros")
+    void searchBathrooms_returnsFilteredBathrooms() {
+
+        BathroomFilter filter = new BathroomFilter(
+                BathroomStatus.DISPONIBLE,
+                Gender.MASCULINO,
+                1L,
+                "Bloque A");
+
+        when(bathroomRepository.findAll(any(Specification.class)))
+                .thenReturn(List.of(bathroom));
+
+        List<BathroomResponse> result = bathroomService.searchBathrooms(filter);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(Gender.MASCULINO, result.get(0).gender());
+
+        verify(bathroomRepository, times(1))
+                .findAll(any(Specification.class));
+    }
+
+    @Test
+    @DisplayName("Actualiza estado del baño y envía notificación")
+    void updateStatus_whenStatusChanges_sendsNotification() {
+
+        Bathroom updatedBathroom = new Bathroom();
+        updatedBathroom.setId(1L);
+        updatedBathroom.setBlock(block);
+        updatedBathroom.setFloor(1);
+        updatedBathroom.setGender(Gender.MASCULINO);
+        updatedBathroom.setStatus(BathroomStatus.EN_LIMPIEZA);
+
+        when(bathroomRepository.findById(anyLong()))
+                .thenReturn(Optional.of(bathroom));
+
+        when(bathroomRepository.save(any(Bathroom.class)))
+                .thenReturn(updatedBathroom);
+
+        BathroomResponse result = bathroomService.updateStatus(
+                1L,
+                BathroomStatus.EN_LIMPIEZA);
+
+        assertNotNull(result);
+        assertEquals(BathroomStatus.EN_LIMPIEZA, result.status());
+
+        verify(notificationService, times(1))
+                .notifyBathroomStatusChanged(any());
+    }
+
+    @Test
+    @DisplayName("No envía notificación cuando el estado no cambia")
+    void updateStatus_whenSameStatus_doesNotSendNotification() {
+
+        bathroom.setStatus(BathroomStatus.DISPONIBLE);
+
+        when(bathroomRepository.findById(anyLong()))
+                .thenReturn(Optional.of(bathroom));
+
+        BathroomResponse result = bathroomService.updateStatus(
+                1L,
+                BathroomStatus.DISPONIBLE);
+
+        assertNotNull(result);
+        assertEquals(BathroomStatus.DISPONIBLE, result.status());
+
+        verify(bathroomRepository, never())
+                .save(any(Bathroom.class));
+
+        verify(notificationService, never())
+                .notifyBathroomStatusChanged(any());
+    }
+
+    @Test
+    @DisplayName("Lanza excepción cuando baño no existe en update")
+    void update_whenBathroomNotFound_throwsException() {
+
+        BathroomRequest request = new BathroomRequest(
+                Gender.FEMENINO,
+                1L,
+                BathroomStatus.EN_LIMPIEZA,
+                2);
+
+        when(bathroomRepository.findById(anyLong()))
+                .thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class,
+                () -> bathroomService.update(1L, request));
+
+        verify(bathroomRepository, never())
+                .save(any(Bathroom.class));
+    }
+
+    @Test
+    @DisplayName("Lanza excepción cuando bloque no existe en update")
+    void update_whenBlockNotFound_throwsException() {
+
+        BathroomRequest request = new BathroomRequest(
+                Gender.FEMENINO,
+                1L,
+                BathroomStatus.EN_LIMPIEZA,
+                2);
+
+        when(bathroomRepository.findById(anyLong()))
+                .thenReturn(Optional.of(bathroom));
+
+        when(blockRepository.findById(anyLong()))
+                .thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class,
+                () -> bathroomService.update(1L, request));
+
+        verify(bathroomRepository, never())
+                .save(any(Bathroom.class));
+    }
+
+    @Test
+    @DisplayName("Envía notificación cuando update cambia estado")
+    void update_whenStatusChanges_sendsNotification() {
+
+        BathroomRequest request = new BathroomRequest(
+                Gender.MASCULINO,
+                1L,
+                BathroomStatus.EN_LIMPIEZA,
+                1);
+
+        Bathroom updatedBathroom = new Bathroom();
+        updatedBathroom.setId(1L);
+        updatedBathroom.setBlock(block);
+        updatedBathroom.setFloor(1);
+        updatedBathroom.setGender(Gender.MASCULINO);
+        updatedBathroom.setStatus(BathroomStatus.EN_LIMPIEZA);
+
+        when(bathroomRepository.findById(anyLong()))
+                .thenReturn(Optional.of(bathroom));
+
+        when(blockRepository.findById(anyLong()))
+                .thenReturn(Optional.of(block));
+
+        when(bathroomRepository.save(any(Bathroom.class)))
+                .thenReturn(updatedBathroom);
+
+        bathroomService.update(1L, request);
+
+        verify(notificationService, times(1))
+                .notifyBathroomStatusChanged(any());
+    }
+
+    @Test
+    @DisplayName("No envía notificación cuando update no cambia estado")
+    void update_whenStatusDoesNotChange_doesNotSendNotification() {
+
+        BathroomRequest request = new BathroomRequest(
+                Gender.MASCULINO,
+                1L,
+                BathroomStatus.DISPONIBLE,
+                1);
+
+        when(bathroomRepository.findById(anyLong()))
+                .thenReturn(Optional.of(bathroom));
+
+        when(blockRepository.findById(anyLong()))
+                .thenReturn(Optional.of(block));
+
+        when(bathroomRepository.save(any(Bathroom.class)))
+                .thenReturn(bathroom);
+
+        bathroomService.update(1L, request);
+
+        verify(notificationService, never())
+                .notifyBathroomStatusChanged(any());
+    }
+
+    @Test
+    @DisplayName("Lanza excepción cuando baño no existe en updateStatus")
+    void updateStatus_whenBathroomNotFound_throwsException() {
+
+        when(bathroomRepository.findById(anyLong()))
+                .thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class,
+                () -> bathroomService.updateStatus(
+                        1L,
+                        BathroomStatus.EN_LIMPIEZA));
+
+        verify(notificationService, never())
+                .notifyBathroomStatusChanged(any());
     }
 
 }
