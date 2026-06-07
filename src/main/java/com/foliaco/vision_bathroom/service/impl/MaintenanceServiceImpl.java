@@ -79,6 +79,8 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         maintenance.setTechnicianFullName(request.technicianFullName());
         maintenance.setDescription(request.description());
         maintenance.setStatus(Maintenance.Status.ABIERTO);
+        maintenance.setReportedAt(LocalDateTime.now());
+        maintenance.setScheduledAt(request.scheduledAt());
 
         return toMaintenanceResponse(maintenanceRepository.save(maintenance));
     }
@@ -98,7 +100,8 @@ public class MaintenanceServiceImpl implements MaintenanceService {
 
         maintenance.setBathroom(bathroom);
         maintenance.setDescription(request.description().trim());
-
+        maintenance.setTechnicianFullName(request.technicianFullName().trim());
+        maintenance.setScheduledAt(request.scheduledAt());
         return toMaintenanceResponse(maintenanceRepository.save(maintenance));
 
     }
@@ -140,6 +143,8 @@ public class MaintenanceServiceImpl implements MaintenanceService {
                 maintenance.getTechnicianFullName(), 
                 maintenance.getDescription(),
                 maintenance.getStatus(), 
+                maintenance.getReportedAt(),
+                maintenance.getScheduledAt(),
                 maintenance.getResolvedAt()
             );
     }

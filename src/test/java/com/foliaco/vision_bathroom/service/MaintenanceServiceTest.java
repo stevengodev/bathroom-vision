@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,7 +66,9 @@ class MaintenanceServiceTest {
         request = new MaintenanceRequest(
                 1L,
                 "Carlos Perez",
+                LocalDateTime.now().plusDays(1),
                 "Fuga de agua"
+                
         );
     }
 
@@ -337,6 +340,7 @@ class MaintenanceServiceTest {
                 new MaintenanceRequest(
                         1L,
                         "Carlos Perez",
+                        LocalDateTime.now().plusDays(1),
                         "   Nueva descripción   "
                 );
 

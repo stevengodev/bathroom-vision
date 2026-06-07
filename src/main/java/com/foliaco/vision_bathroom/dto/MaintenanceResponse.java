@@ -10,6 +10,8 @@ public record MaintenanceResponse(
     String technicianFullName,
     String description,
     Status status,
+    LocalDateTime reportedAt,
+    LocalDateTime scheduledAt,
     LocalDateTime resolvedAt
 ) {
 }

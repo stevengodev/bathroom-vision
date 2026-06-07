@@ -29,6 +29,9 @@ public class Maintenance {
     @Column(name = "reported_at")
     private LocalDateTime reportedAt;
 
+    @Column(name = "scheduled_at")
+    private LocalDateTime scheduledAt;
+
     private String description;
 
     @Enumerated(EnumType.STRING)

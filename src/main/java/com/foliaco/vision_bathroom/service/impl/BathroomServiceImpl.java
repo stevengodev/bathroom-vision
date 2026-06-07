@@ -109,8 +109,7 @@ public class BathroomServiceImpl implements BathroomService {
 
         // Evita enviar notificación si el estado no cambió
         if (previousStatus != request.status()) {
-            notificationService.notifyBathroomStatusChanged(
-                    buildPushNotificationRequest(savedBathroom));
+            notificationService.notifyBathroomStatusChanged(buildPushNotificationRequest(savedBathroom));
         }
 
         return toBathroomResponse(savedBathroom);
@@ -161,7 +160,7 @@ public class BathroomServiceImpl implements BathroomService {
                 "El baño (%s) del piso %d está %s",
                 bathroom.getGender().toString().toLowerCase(),
                 bathroom.getFloor(),
-                bathroom.getStatus().toString().toLowerCase());
+                bathroom.getStatus().toDisplayString());
 
         Map<String, String> data = new HashMap<>();
         data.put("blockName", bathroom.getBlock().getName());
