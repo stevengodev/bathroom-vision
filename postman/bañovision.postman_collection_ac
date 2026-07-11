@@ -1,0 +1,820 @@
+{
+  "info": {
+    "_postman_id": "582dc12e-730f-4789-9cf9-0fcdca397580",
+    "name": "bañovision",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "45896311"
+  },
+  "item": [
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "autenticarse google",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"idToken\": \"eyJhbGciOiJSUzI1NiIsImtpZCI6ImIzZDk1Yjk1ZmE0OGQxODBiODVmZmU4MDgyZmNmYTIxNzRiMDQ2NjciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI5ODA2MzA5NjMzMDYtY29lN2Jla2VnZmlqMGQ2YmM5ZnMyNHV2bGw5cXUwMGMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI5ODA2MzA5NjMzMDYtY29lN2Jla2VnZmlqMGQ2YmM5ZnMyNHV2bGw5cXUwMGMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDQ5MjQzODQ3OTQyNDA0MDAyNTQiLCJlbWFpbCI6InN0ZXZlbmdmMDQyNEBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmJmIjoxNzc1ODY4MTU4LCJuYW1lIjoiU3RldmVuIEdvbWV6IiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FDZzhvY0l0b3pHdTZOc0g0aExHSWZKOG01ekp5VGh3Nlp1bXFkTmx4OGQzQ2djSjZxeGxqRzVIPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IlN0ZXZlbiIsImZhbWlseV9uYW1lIjoiR29tZXoiLCJpYXQiOjE3NzU4Njg0NTgsImV4cCI6MTc3NTg3MjA1OCwianRpIjoiMzllMTgwZjE4NDI2MmYwMzIyMDE0NzdkNzQ5NGU2ZDhhOGFmMzYwNyJ9.WLQHe9qKFVdLDc5bEHgJq-RNXuB3SWaNNtlqhKMWibkjlwgQawXMQ45DakNFfKy8FksqNtUruJeQ9DwGoVd0izvTLcBXbxDyUuR2DOJFtvj0jW8KpF7Y9JkuP9NNP61rXYXw_GsvXP_SHD063Mrt3nY8mm1sMYI8IgXL0mklx08QD-5e-MKt8zIAHTAk72W0WfnLjIdmdGpkjVIGgWtiAii7INKptlbwYKzWupWB-Fz5MIVUBy30iysaZteBXPcoJLcKaQ0ZhY1aeqixaxDvINdAfWYz8a3HhEgLMi6YVcdCpVwgpwuFa2cf02x761iPUGBCSoSd3bxxOu6ThXeRGg\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/auth/google",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "auth",
+                "google"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "registrarse",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Cristiano Ronaldo dos Santos Aveiro\",\r\n  \"email\": \"cristiano@cecar.edu.co\",\r\n  \"password\": \"123456\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/auth/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"steven.gomezf@cecar.edu.co\",\r\n  \"password\": \"123456\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "bathroom",
+      "item": [
+        {
+          "name": "listar baños",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJzdGV2ZW5nZjA0MjRAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwibmFtZSI6IlN0ZXZlbiBHb21leiIsImlhdCI6MTc3MzA3NjM5NywiZXhwIjoxNzczMTYyNzk3fQ.UVcwXe0b9k-crabq7W6CAaxVEN23anuY0Deub09fKxv9-DIc8CFP0PGy-SLupAIU",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/bathrooms",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "bathrooms"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerBañoPorid",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "CrearBaño",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/bathrooms",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "bathrooms"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ActualizarBaño",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/bathrooms",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "bathrooms"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "EliminarBaño",
+          "request": {
+            "method": "DELETE",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "CambiarEstadoBaño",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/bathrooms/2/status",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "bathrooms",
+                "2",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "BuscarBaño",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "/api/bathrooms/search",
+              "path": [
+                "api",
+                "bathrooms",
+                "search"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListarBañoPorBloque",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "block",
+      "item": [
+        {
+          "name": "listadoBloques",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "obtenerBloquePorId",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "crearBloque",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "http://localhost:8081/api/blocks/{id}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/blocks/{id}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "blocks",
+                "{id}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "actualizarBloque",
+          "request": {
+            "method": "PUT",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "eliminarBloque",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "http://localhost:8081/api/blocks/{id}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/blocks/{id}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "blocks",
+                "{id}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "cleaning",
+      "item": [
+        {
+          "name": "ListarCronogramasLimpieza",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzdGV2ZW4uZ29tZXpmQGNlY2FyLmVkdS5jbyIsInJvbGVzIjpbIkNMRUFORVIiXSwibmFtZSI6IlNURVZFTiBEQVZJRCBHT01FWiBGT0xJQUNPIiwiaWF0IjoxNzc1OTk5ODA1LCJleHAiOjE3NzYwODYyMDV9.bkp__1Sx97OFBGYKVsMZMiVFHv6oQdIYg8VAFxW6P15DX2gQNxNdwCP4qZeUthLM",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"bathroomId\": 1,\r\n  \"startDate\": \"2027-07-01\",\r\n  \"endDate\": \"2027-12-31\",\r\n  \"frequency\": \"WEEKLY\",\r\n  \"interval\": 1,\r\n  \"daysOfWeek\": \"MO,TU,WE,TH,FR\",\r\n  \"startTime\": \"19:00:00\",\r\n  \"endTime\": \"19:30:00\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/schedules/cleaning",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "schedules",
+                "cleaning"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListarCronogramasLimpiezaPorId",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "1. Listar cronogramas de limpieza",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"bathroomId\": 1,\r\n  \"startDate\": \"2027-07-01\",\r\n  \"endDate\": \"2027-12-31\",\r\n  \"frequency\": \"WEEKLY\",\r\n  \"interval\": 1,\r\n  \"daysOfWeek\": \"MO,TU,WE,TH,FR\",\r\n  \"startTime\": \"19:00:00\",\r\n  \"endTime\": \"19:30:00\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/schedules/cleaning",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "schedules",
+                "cleaning"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CrearCronogramaLimpieza",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbkBjZWNhci5lZHUuY28iLCJyb2xlcyI6WyJBRE1JTiJdLCJuYW1lIjoiU3VwZXIgQWRtaW4gQ2VjYXIiLCJpYXQiOjE3NzYwMDA3MzUsImV4cCI6MTc3NjA4NzEzNX0.qPg412f1aZ2Y41SiDPbwhCtL7O4thOVNTtdJG5t4an9Odm26so_cboEukFcYjNIt",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"bathroomId\": 2,\r\n  \"userId\": 4,\r\n  \"startDate\": \"2026-04-12\",\r\n  \"endDate\": \"2026-04-12\",\r\n  \"frequency\": \"DIARIO\",\r\n  \"daysOfWeek\": \"MO,TU,WE,TH,FR\",\r\n  \"startTime\": \"19:00:00\",\r\n  \"endTime\": \"19:30:00\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/schedules/cleaning",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "schedules",
+                "cleaning"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ActualizarCronogramaLimpieza",
+          "request": {
+            "method": "PUT",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "EliminarCronogramaLimpieza",
+          "request": {
+            "method": "DELETE",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "ObtenerMisCronogramaDeLimpieza",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "ListarCronogramaPorBaño",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "user",
+      "item": [
+        {
+          "name": "ver perfil",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJjcmlzdGlhbm9AY2VjYXIuZWR1LmNvIiwicm9sZXMiOlsiVVNFUiJdLCJuYW1lIjoiQ3Jpc3RpYW5vIFJvbmFsZG8gZG9zIFNhbnRvcyBBdmVpcm8iLCJpYXQiOjE3NzU5NTQyOTAsImV4cCI6MTc3NjA0MDY5MH0.dmqiiJs7JKYVojHpjsZg2weLB06i7e4vN6MUTRBV6y8yjN5gI-9fcDN02SF-nGCl",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/users/profile",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "users",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "listar usuarios",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJjcmlzdGlhbm9AY2VjYXIuZWR1LmNvIiwicm9sZXMiOlsiVVNFUiJdLCJuYW1lIjoiQ3Jpc3RpYW5vIFJvbmFsZG8gZG9zIFNhbnRvcyBBdmVpcm8iLCJpYXQiOjE3NzU5NTQyOTAsImV4cCI6MTc3NjA0MDY5MH0.dmqiiJs7JKYVojHpjsZg2weLB06i7e4vN6MUTRBV6y8yjN5gI-9fcDN02SF-nGCl",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/users?roles=MAINTAINER,CLEANER",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "roles",
+                  "value": "MAINTAINER,CLEANER"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "maintenance",
+      "item": [
+        {
+          "name": "listarMantenimientos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/maintenances",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "maintenances"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "obtenerMantenimientoPorId",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "crearMantenimiento",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/maintenances",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "maintenances"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "actualizarMantenimiento",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/maintenances/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "maintenances",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "eliminarMantenimiento",
+          "request": {
+            "method": "DELETE",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "cambiarEstadoMantenimiento",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/maintenances/1/status",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "maintenances",
+                "1",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "obtenerMisMantenimientos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/maintenances/my",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "maintenances",
+                "my"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "listarMantenimientosPorBaño",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/maintenances/bathroom/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "maintenances",
+                "bathroom",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "incidents",
+      "item": [
+        {
+          "name": "listarIncidencia",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "actualizarEstado",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbkBjZWNhci5lZHUuY28iLCJyb2xlcyI6WyJBRE1JTiJdLCJuYW1lIjoiQWRtaW4gQ2VjYXIiLCJpYXQiOjE3ODEwNTQ5MDIsImV4cCI6MTc4MTE0MTMwMn0.vtMEow9nBrl9Q1fvW_OCu2SbuEbMocxd08Sj7ePte-6FjX7kSDKkj8xj5L5MO3kI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/incidents/1/status?bathroomId=2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "incidents",
+                "1",
+                "status"
+              ],
+              "query": [
+                {
+                  "key": "bathroomId",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "reportarIncidencia",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbkBjZWNhci5lZHUuY28iLCJyb2xlcyI6WyJBRE1JTiJdLCJuYW1lIjoiQWRtaW4gQ2VjYXIiLCJpYXQiOjE3ODEwNTQ5MDIsImV4cCI6MTc4MTE0MTMwMn0.vtMEow9nBrl9Q1fvW_OCu2SbuEbMocxd08Sj7ePte-6FjX7kSDKkj8xj5L5MO3kI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"admin@cecar.edu.co\",\r\n  \"incidentMessageIds\": [\r\n    1,2,3\r\n  ],\r\n  \"bathroomId\": 2\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/incidents",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "incidents"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
