@@ -63,12 +63,12 @@ public class AuthServiceTest {
     @DisplayName("Debe registrar usuario correctamente")
     void register_success() {
 
-        var request = new UserRequest("Test", "test@mail.com", "1234",  User.Role.USER);
+        var request = new UserRequest("Test", "test@cecar.edu.co", "1234",  User.Role.USER);
 
         User savedUser = User.builder()
                 .id(1L)
                 .name("Test")
-                .email("test@mail.com")
+                .email("test@cecar.edu.co")
                 .password("encoded-password")
                 .role(User.Role.USER)
                 .build();
@@ -81,7 +81,7 @@ public class AuthServiceTest {
 
         assertNotNull(response);
         assertEquals("jwt-token", response.accessToken());
-        assertEquals("test@mail.com", response.user().email());
+        assertEquals("test@cecar.edu.co", response.user().email());
 
         verify(passwordEncoder).encode("1234");
         verify(userRepository).save(any(User.class));
@@ -92,9 +92,9 @@ public class AuthServiceTest {
     @DisplayName("Debe fallar registro si el email ya existe")
     void register_emailAlreadyExists() {
 
-        var request = new UserRequest("Test", "test@mail.com", "1234", User.Role.USER);
+        var request = new UserRequest("Test", "test@cecar.edu.co", "1234", User.Role.USER);
 
-        when(userRepository.findByEmail("test@mail.com"))
+        when(userRepository.findByEmail("test@cecar.edu.co"))
                 .thenReturn(Optional.of(new User()));
 
         assertThrows(ConflictException.class,
@@ -107,17 +107,17 @@ public class AuthServiceTest {
     @DisplayName("Debe hacer login correctamente")
     void login_success() {
 
-        var request = new LoginRequest("test@mail.com", "1234");
+        var request = new LoginRequest("test@cecar.edu.co", "1234");
 
         User user = User.builder()
                 .id(1L)
                 .name("Test")
-                .email("test@mail.com")
+                .email("test@cecar.edu.co")
                 .password("encoded-password")
                 .role(User.Role.USER)
                 .build();
 
-        when(userRepository.findByEmail("test@mail.com")).thenReturn(Optional.of(user));
+        when(userRepository.findByEmail("test@cecar.edu.co")).thenReturn(Optional.of(user));
         when(passwordEncoder.matches("1234", "encoded-password")).thenReturn(true);
         when(jwtService.generateToken(user)).thenReturn("jwt-token");
 
@@ -126,7 +126,7 @@ public class AuthServiceTest {
         assertNotNull(response);
         assertEquals("jwt-token", response.accessToken());
 
-        verify(userRepository).findByEmail("test@mail.com");
+        verify(userRepository).findByEmail("test@cecar.edu.co");
         verify(passwordEncoder).matches("1234", "encoded-password");
         verify(jwtService).generateToken(user);
     }
@@ -135,9 +135,9 @@ public class AuthServiceTest {
     @DisplayName("Debe lanzar excepción si el usuario no existe")
     void login_userNotFound() {
 
-        var request = new LoginRequest("test@mail.com", "1234");
+        var request = new LoginRequest("test@cecar.edu.co", "1234");
 
-        when(userRepository.findByEmail("test@mail.com"))
+        when(userRepository.findByEmail("test@cecar.edu.co"))
                 .thenReturn(Optional.empty());
 
         assertThrows(UnauthorizedException.class,
@@ -151,14 +151,14 @@ public class AuthServiceTest {
     @DisplayName("Debe lanzar excepción si el password es incorrecto")
     void login_invalidPassword() {
 
-        var request = new LoginRequest("test@mail.com", "wrong");
+        var request = new LoginRequest("test@cecar.edu.co", "wrong");
 
         User user = User.builder()
-                .email("test@mail.com")
+                .email("test@cecar.edu.co")
                 .password("encoded-password")
                 .build();
 
-        when(userRepository.findByEmail("test@mail.com"))
+        when(userRepository.findByEmail("test@cecar.edu.co"))
                 .thenReturn(Optional.of(user));
 
         when(passwordEncoder.matches("wrong", "encoded-password"))
@@ -174,7 +174,7 @@ public class AuthServiceTest {
     @DisplayName("Debe autenticar cuando el usuario ya existe")
     void authenticate_existingUser_returnsJwt() throws Exception {
 
-        String email = "test@gmail.com";
+        String email = "test@cecar.edu.co";
         String name = "Test User";
         String googleIdToken = "valid-token";
 
@@ -205,7 +205,7 @@ public class AuthServiceTest {
     @DisplayName("Debe crear usuario si no existe")
     void authenticate_newUser_createsAndReturnsJwt() throws Exception {
 
-        String email = "new@gmail.com";
+        String email = "new@cecar.edu.co";
         String name = "New User";
         String googleToken = "valid-token";
 

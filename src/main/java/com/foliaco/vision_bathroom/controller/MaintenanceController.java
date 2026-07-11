@@ -64,7 +64,7 @@ public class MaintenanceController {
     }
 
     @PatchMapping("/{id}/status")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MAINTAINER')")
     public ResponseEntity<MaintenanceResponse> updateStatus(@PathVariable Long id, @RequestParam Maintenance.Status status) {
         MaintenanceResponse updated = maintenanceService.updateStatus(id, status);
         return ResponseEntity.ok(updated);

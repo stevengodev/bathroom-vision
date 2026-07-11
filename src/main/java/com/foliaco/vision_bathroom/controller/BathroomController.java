@@ -59,7 +59,6 @@ public class BathroomController {
     }
 
     @PatchMapping("/{id}/status")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BathroomResponse> updateStatus(@PathVariable Long id,
             @Valid @RequestBody UpdateBathroomStatusRequest request) {
 

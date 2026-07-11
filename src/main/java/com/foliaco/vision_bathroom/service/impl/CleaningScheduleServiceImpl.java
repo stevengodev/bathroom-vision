@@ -145,7 +145,7 @@ public class CleaningScheduleServiceImpl implements CleaningScheduleService {
                 scheduleRepository.delete(cleaningSchedule);
                 log.info("Horario de limpieza eliminado: id={}, baño={}",
                                 id, cleaningSchedule.getBathroom());
-        }
+        }   
 
         private CleaningScheduleResponse toCleaningScheduleResponse(CleaningSchedule cleaningSchedule) {
                 return new CleaningScheduleResponse(
