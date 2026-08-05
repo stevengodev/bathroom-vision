@@ -1,7 +1,6 @@
 package com.foliaco.vision_bathroom.repository;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,19 +53,5 @@ public interface CleaningScheduleRepository extends JpaRepository<CleaningSchedu
     """)
     List<CleaningSchedule> findActiveSchedulesForDate(@Param("date") LocalDate date);
 
-    /** Verificar solapamiento de horario en el mismo baño */
-    @Query("""
-        SELECT COUNT(cs) > 0 FROM CleaningSchedule cs
-        WHERE cs.bathroom.id = :bathroomId
-          AND cs.id <> :excludeId
-          AND cs.startTime < :endTime
-          AND cs.endTime > :startTime
-    """)
-    boolean existsOverlap(
-            @Param("bathroomId") Long bathroomId,
-            @Param("startTime") LocalTime startTime,
-            @Param("endTime") LocalTime endTime,
-            @Param("excludeId") Long excludeId
-    );
 }
 

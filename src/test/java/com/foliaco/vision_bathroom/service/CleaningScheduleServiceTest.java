@@ -202,12 +202,8 @@ public class CleaningScheduleServiceTest {
         when(userRepository.findById(1L))
                 .thenReturn(Optional.of(user));
 
-        when(scheduleRepository.existsOverlap(
-                anyLong(),
-                any(),
-                any(),
-                anyLong()))
-                .thenReturn(false);
+        when(scheduleRepository.findByBathroomId(1L))
+                .thenReturn(List.of());
 
         when(scheduleRepository.save(any(CleaningSchedule.class)))
                 .thenReturn(cleaningSchedule);
@@ -281,12 +277,8 @@ public class CleaningScheduleServiceTest {
         when(userRepository.findById(1L))
                 .thenReturn(Optional.of(user));
 
-        when(scheduleRepository.existsOverlap(
-                anyLong(),
-                any(),
-                any(),
-                anyLong()))
-                .thenReturn(true);
+        when(scheduleRepository.findByBathroomId(1L))
+                .thenReturn(List.of(cleaningSchedule));
 
         assertThrows(ConflictException.class,
                 () -> service.create(request));
