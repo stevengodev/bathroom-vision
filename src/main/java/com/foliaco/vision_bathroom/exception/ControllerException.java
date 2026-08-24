@@ -26,6 +26,23 @@ public class ControllerException {
         return problemDetail;
     }
 
+    @ExceptionHandler({ ConflictException.class })
+    public ProblemDetail conflictException(RuntimeException runtimeException) {
+
+        ErrorMessage errorMessage = ErrorMessage.builder()
+                .message(runtimeException.getMessage())
+                .timestamp(LocalDateTime.now())
+                .statusCode(HttpStatus.CONFLICT.value())
+                .build();
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, errorMessage.getMessage());
+        problemDetail.setTitle("Conflict");
+        problemDetail.setProperty("timestamp", errorMessage.getTimestamp());
+        problemDetail.setProperty("statusCode", errorMessage.getStatusCode());
+
+        return problemDetail;
+    }
+
     @ExceptionHandler({UnauthorizedException.class, InvalidGoogleTokenException.class})
     public ProblemDetail unauthorizedException(RuntimeException runtimeException) {
 

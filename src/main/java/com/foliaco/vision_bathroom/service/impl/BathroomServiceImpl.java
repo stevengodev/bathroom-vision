@@ -11,11 +11,13 @@ import com.foliaco.vision_bathroom.dto.PushNotificationRequest;
 import com.foliaco.vision_bathroom.entity.Bathroom;
 import com.foliaco.vision_bathroom.entity.Bathroom.BathroomStatus;
 import com.foliaco.vision_bathroom.entity.Block;
+import com.foliaco.vision_bathroom.exception.ConflictException;
 import com.foliaco.vision_bathroom.exception.NotFoundException;
 import com.foliaco.vision_bathroom.firebase.NotificationService;
 import com.foliaco.vision_bathroom.repository.BathroomRepository;
 import com.foliaco.vision_bathroom.repository.BathroomSpecification;
 import com.foliaco.vision_bathroom.repository.BlockRepository;
+import com.foliaco.vision_bathroom.repository.IncidentRepository;
 import com.foliaco.vision_bathroom.service.BathroomService;
 
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,7 @@ public class BathroomServiceImpl implements BathroomService {
 
     private final BathroomRepository bathroomRepository;
     private final BlockRepository blockRepository;
+    private final IncidentRepository incidentRepository;
     private final NotificationService notificationService;
 
     @Override
@@ -139,6 +142,10 @@ public class BathroomServiceImpl implements BathroomService {
     public void delete(Long id) {
         Bathroom bathroom = bathroomRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Bathroom not found with id: " + id));
+
+        if (incidentRepository.existsByBathroomId(id)) {
+            throw new ConflictException("No se puede eliminar el baño porque tiene incidentes asociados");
+        }
 
         bathroomRepository.delete(bathroom);
     }

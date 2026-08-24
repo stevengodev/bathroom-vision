@@ -28,10 +28,12 @@ import com.foliaco.vision_bathroom.entity.Bathroom;
 import com.foliaco.vision_bathroom.entity.Bathroom.BathroomStatus;
 import com.foliaco.vision_bathroom.entity.Bathroom.Gender;
 import com.foliaco.vision_bathroom.entity.Block;
+import com.foliaco.vision_bathroom.exception.ConflictException;
 import com.foliaco.vision_bathroom.exception.NotFoundException;
 import com.foliaco.vision_bathroom.firebase.NotificationService;
 import com.foliaco.vision_bathroom.repository.BathroomRepository;
 import com.foliaco.vision_bathroom.repository.BlockRepository;
+import com.foliaco.vision_bathroom.repository.IncidentRepository;
 import com.foliaco.vision_bathroom.service.impl.BathroomServiceImpl;
 
 import static org.assertj.core.api.Assertions.*;
@@ -47,6 +49,9 @@ public class BathroomServiceTest {
 
     @Mock
     private BlockRepository blockRepository;
+
+    @Mock
+    private IncidentRepository incidentRepository;
 
     @Mock
     private NotificationService notificationService;
@@ -195,6 +200,19 @@ public class BathroomServiceTest {
 
         verify(bathroomRepository, times(1)).findById(anyLong());
         verify(bathroomRepository, times(1)).delete(any(Bathroom.class));
+    }
+
+    @Test
+    @DisplayName("Lanza ConflictException cuando el baño tiene incidentes asociados")
+    void delete_whenBathroomHasIncidents_throwsConflictException() {
+
+        when(bathroomRepository.findById(anyLong())).thenReturn(Optional.of(bathroom));
+        when(incidentRepository.existsByBathroomId(1L)).thenReturn(true);
+
+        ConflictException exception = assertThrows(ConflictException.class, () -> bathroomService.delete(1L));
+
+        assertThat(exception.getMessage()).isEqualTo("No se puede eliminar el baño porque tiene incidentes asociados");
+        verify(bathroomRepository, never()).delete(any(Bathroom.class));
     }
 
     @Test

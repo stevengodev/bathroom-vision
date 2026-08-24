@@ -83,6 +83,8 @@ public interface IncidentRepository extends JpaRepository<Incident, Long> {
 
         List<Incident> findByUserIdAndBathroomIdAndStatus(Long userId, Long bathroomId, Status status);
 
+        boolean existsByBathroomId(Long bathroomId);
+
         boolean existsByUserAndBathroomAndIncidentMessageAndStatus(
                         User user,
                         Bathroom bathroom,
