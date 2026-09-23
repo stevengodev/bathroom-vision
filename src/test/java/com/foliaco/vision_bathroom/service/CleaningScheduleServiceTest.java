@@ -294,6 +294,9 @@ public class CleaningScheduleServiceTest {
         when(bathroomRepository.findById(1L))
                 .thenReturn(Optional.of(bathroom));
 
+        when(userRepository.findById(1L))
+                .thenReturn(Optional.of(user));
+
         when(scheduleRepository.save(any(CleaningSchedule.class)))
                 .thenReturn(cleaningSchedule);
 
@@ -303,6 +306,44 @@ public class CleaningScheduleServiceTest {
         assertNotNull(response);
 
         verify(scheduleRepository).save(any(CleaningSchedule.class));
+    }
+
+    @Test
+    @DisplayName("Debe actualizar también el usuario del horario")
+    void shouldUpdateScheduleUser() {
+
+        User updatedUser = new User();
+        updatedUser.setId(2L);
+        updatedUser.setName("Ana");
+        updatedUser.setEmail("ana@test.com");
+
+        CleaningScheduleRequest updatedRequest = new CleaningScheduleRequest(
+                1L,
+                2L,
+                LocalDate.now(),
+                LocalDate.now().plusDays(10),
+                CleaningSchedule.Frequency.DIARIO,
+                null,
+                LocalTime.of(8, 0),
+                LocalTime.of(10, 0)
+        );
+
+        when(scheduleRepository.findByIdWithDetails(1L))
+                .thenReturn(Optional.of(cleaningSchedule));
+
+        when(bathroomRepository.findById(1L))
+                .thenReturn(Optional.of(bathroom));
+
+        when(userRepository.findById(2L))
+                .thenReturn(Optional.of(updatedUser));
+
+        when(scheduleRepository.save(any(CleaningSchedule.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        service.update(1L, updatedRequest);
+
+        verify(scheduleRepository).save(argThat(schedule ->
+                schedule.getUser() != null && schedule.getUser().getId().equals(2L)));
     }
 
     @Test

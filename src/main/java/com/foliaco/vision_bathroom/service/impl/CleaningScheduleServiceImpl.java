@@ -128,6 +128,9 @@ public class CleaningScheduleServiceImpl implements CleaningScheduleService {
                 Bathroom bathroom = bathroomRepository.findById(request.bathroomId()).orElseThrow(
                                 () -> new NotFoundException("Baño no encontrado con id: " + request.bathroomId()));
 
+                User user = userRepository.findById(request.userId()).orElseThrow(
+                                () -> new NotFoundException("Usuario no encontrado con id: " + request.userId()));
+
                 if (request.frequency() == CleaningSchedule.Frequency.SEMANAL
                                 && (request.daysOfWeek() == null || request.daysOfWeek().isBlank())) {
 
@@ -148,6 +151,7 @@ public class CleaningScheduleServiceImpl implements CleaningScheduleService {
                 validateOverlap(request.bathroomId(), request, id);
 
                 cleaningSchedule.setBathroom(bathroom);
+                cleaningSchedule.setUser(user);
                 cleaningSchedule.setStartDate(request.startDate());
                 cleaningSchedule.setEndDate(request.endDate());
                 cleaningSchedule.setFrequency(request.frequency());
