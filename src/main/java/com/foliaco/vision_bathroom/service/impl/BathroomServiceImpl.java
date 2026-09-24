@@ -164,8 +164,9 @@ public class BathroomServiceImpl implements BathroomService {
 
         String title = "Baño " + bathroom.getStatus().toDisplayString();
         String body = String.format(
-                "El baño (%s) del piso %d está %s",
+                "El baño %s, %s, piso %d está %s",
                 bathroom.getGender().toString().toLowerCase(),
+                bathroom.getBlock().getName(),
                 bathroom.getFloor(),
                 bathroom.getStatus().toDisplayString());
 
